@@ -16,11 +16,10 @@ spring:
       discovery:
         locator:
           enabled: true
-          lower-case-service-id: true
-      
+
       routes:
         - id: bff_route
-          uri: lb://microservico-radares-bff
+          uri: lb://MICROSERVICO-RADARES-BFF
           predicates:
             - Path=/api/**
           filters:
