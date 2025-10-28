@@ -2,7 +2,7 @@ server:
   port: 8080
 
 spring:
-  # --- [NOVO] CONFIGURA«√O DE SEGURAN«A OIDC (KEYCLOAK) ---
+  # --- [NOVO] CONFIGURA√á√ÉO DE SEGURAN√áA OIDC (KEYCLOAK) ---
   security:
     oauth2:
       resourceserver:
@@ -10,7 +10,7 @@ spring:
           # Aponta para o seu servidor Keycloak.
           issuer-uri: http://keycloak:8080/realms/radares-realm
   
-  # --- CONFIGURA«√O DO GATEWAY ---
+  # --- CONFIGURA√á√ÉO DO GATEWAY ---
   cloud:
     gateway:
       discovery:
@@ -28,7 +28,7 @@ spring:
       
       globalcors:
         cors-configurations:
-          '[/**]': # Aplica a todas as rotas
+          '[/**]':
             allowedOrigins: "http://localhost:3009"
             allowedMethods:
               - GET
