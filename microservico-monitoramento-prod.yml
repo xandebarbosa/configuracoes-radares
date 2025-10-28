@@ -1,0 +1,33 @@
+server:
+  port: 8089
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: microservico-monitoramento
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/monitoramento_db
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN}
+  chat:
+    id: ${TELEGRAM_CHAT_ID}

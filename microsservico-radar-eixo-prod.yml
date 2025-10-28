@@ -1,0 +1,35 @@
+server:
+  port: 8086
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: microservice-radar-eixo
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-db:5432/eixo_db
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
+rabbitmq:
+  exchange:
+    name: radares_exchange
+  routing:
+    key: radares.eixo

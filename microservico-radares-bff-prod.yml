@@ -1,0 +1,37 @@
+server:
+  port: 8081
+
+elasticsearch:
+  host: localhost
+  port: 9200
+
+spring:
+  rabbitmq:
+    host: rabbitmq-central
+    port: 5672
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+  cache:
+    type: simple
+
+# --- RESILIENCE4J CIRCUIT BREAKER (Formato YAML limpo) ---
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 4s
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+    instances:
+      radaresService:
+        base-config: default
+        sliding-window-size: 20
+      monitoramentoService:
+        base-config: default
