@@ -8,7 +8,7 @@ spring:
       resourceserver:
         jwt:
           # Aponta para o seu servidor Keycloak.
-          issuer-uri: http://keycloak:8080/realms/radares-realm
+          issuer-uri: http://host.docker.internal:8180/realms/radares-realm
   
   # --- CONFIGURAÇÃO DO GATEWAY ---
   cloud:
