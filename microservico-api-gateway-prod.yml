@@ -8,7 +8,7 @@ spring:
       resourceserver:
         jwt:
           # Aponta para o seu servidor Keycloak.
-          issuer-uri: http://host.docker.internal:8180/realms/radares-realm
+          jwk-set-uri: http://host.docker.internal:8180/realms/radares-realm/protocol/openid-connect/certs
   
   # --- CONFIGURAÇÃO DO GATEWAY ---
   cloud:
