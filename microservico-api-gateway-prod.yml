@@ -37,3 +37,10 @@ spring:
               - OPTIONS
             allowedHeaders: "*"
             allowCredentials: true
+  # [NOVO] Adiciona logs de debug para roteamento e service discovery
+  logging:
+    level:
+      # Mostra detalhes de roteamento do gateway
+      org.springframework.cloud.gateway: DEBUG
+      # Mostra detalhes de descoberta de serviço (LoadBalancer)
+      org.springframework.cloud.loadbalancer: TRACE
