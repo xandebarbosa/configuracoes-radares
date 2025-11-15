@@ -21,7 +21,7 @@ spring:
 
       routes:
         - id: bff_route
-          uri: lb://MICROSERVICO-RADARES-BFF
+          uri: lb://microservico-radares-bff
           predicates:
             - Path=/ws/**
           filters:
