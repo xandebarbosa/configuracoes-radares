@@ -42,18 +42,8 @@ spring:
   # [NOVO] Adiciona logs de debug para roteamento e service discovery
   logging:
     level:
-    # Mostra detalhes de roteamento do gateway (você já tem)
-    org.springframework.cloud.gateway: DEBUG
-
-    # [ADICIONE ESTES]
-    # Logs gerais de segurança (mostra quais regras estão sendo aplicadas)
-    org.springframework.security: DEBUG
-
-    # Logs da cadeia de filtros de segurança (essencial para ver o 403)
-    org.springframework.security.web.server: TRACE
-
-    # Logs específicos de validação de token (essencial para ver o 401)
-    org.springframework.security.oauth2: TRACE
-
-    # Mostra detalhes de descoberta de serviço (você já tem)
-    org.springframework.cloud.loadbalancer: TRACE
+      org.springframework.cloud.gateway: DEBUG
+      org.springframework.security: DEBUG
+      org.springframework.security.web.server: TRACE
+      org.springframework.security.oauth2: TRACE
+      org.springframework.cloud.loadbalancer: TRACE
