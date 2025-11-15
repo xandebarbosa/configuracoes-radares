@@ -23,9 +23,9 @@ spring:
         - id: bff_route
           uri: lb://MICROSERVICO-RADARES-BFF
           predicates:
-            - Path=/api/**
+            - Path=/ws/**
           filters:
-            - StripPrefix=1
+            - PreserveHostHeader
       
       globalcors:
         add-to-simple-url-handler-mapping: true
