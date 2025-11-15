@@ -19,10 +19,6 @@ spring:
         locator:
           enabled: true
 
-      default-filters:
-        # Remove cabeçalhos duplicados mantendo apenas o primeiro (do Gateway)
-        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
-
       routes:
         - id: bff_route
           uri: lb://MICROSERVICO-RADARES-BFF
