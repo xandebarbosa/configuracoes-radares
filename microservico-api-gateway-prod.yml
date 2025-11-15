@@ -7,6 +7,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          # Ela diz ao Gateway qual "emissor" de token ele deve confiar.
+          issuer-uri: http://host.docker.internal:8180/realms/radares-realm
           # Aponta para o seu servidor Keycloak.
           jwk-set-uri: http://host.docker.internal:8180/realms/radares-realm/protocol/openid-connect/certs
   
