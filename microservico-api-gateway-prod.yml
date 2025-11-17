@@ -9,10 +9,12 @@ spring:
         jwt:
           # Ela diz ao Gateway qual "emissor" de token ele deve confiar.
           #issuer-uri: http://host.docker.internal:8180/realms/radares-realm
-          issuer-uri: http://keycloak:8080/realms/radares-realm
+          #issuer-uri: http://keycloak:8080/realms/radares-realm
+          issuer-uri: http://localhost:8180/realms/radares-realm
           # Aponta para o seu servidor Keycloak.
           #jwk-set-uri: http://host.docker.internal:8180/realms/radares-realm/protocol/openid-connect/certs
-          jwk-set-uri: http://keycloak:8080/realms/radares-realm/protocol/openid-connect/certs
+          #jwk-set-uri: http://keycloak:8080/realms/radares-realm/protocol/openid-connect/certs
+          jwk-set-uri: http://localhost:8180/realms/radares-realm/protocol/openid-connect/certs
   
   # --- CONFIGURAÇÃO DO GATEWAY ---
   cloud:
