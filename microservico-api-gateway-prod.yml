@@ -25,6 +25,7 @@ spring:
           predicates:
             - Path=/api/**
           filters:
+            - StripPrefix=1
             - PreserveHostHeader
       
       globalcors:
