@@ -20,10 +20,10 @@ spring:
           enabled: true
 
       routes:
-        - id: bff_route
-          uri: lb://microservico-radares-bff
+        - id: bff_route_api
+          uri: lb:ws://microservico-radares-bff
           predicates:
-            - Path=/api/**
+            - Path=/api/ws/**
           filters:
             - StripPrefix=1
             - PreserveHostHeader
