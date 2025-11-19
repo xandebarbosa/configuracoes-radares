@@ -14,6 +14,13 @@ spring:
   cache:
     type: simple
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Define a URL que o BFF deve esperar como Issuer
+          issuer-uri: http://192.168.0.6:8180/realms/radares-realm
+
 # --- RESILIENCE4J CIRCUIT BREAKER (Formato YAML limpo) ---
 resilience4j:
   timelimiter:
