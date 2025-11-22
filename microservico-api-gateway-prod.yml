@@ -26,12 +26,28 @@ spring:
           enabled: true
 
       routes:
+        # ---------------------------------------------------------
+        # ROTAS HTTP /api → encaminha para o BFF
+        # ---------------------------------------------------------
         - id: bff_route_api
           uri: lb://microservico-radares-bff
           predicates:
             - Path=/api/**
           filters:
             - StripPrefix=1
+            - PreserveHostHeader
+
+        # ---------------------------------------------------------
+        #  ROTAS WEBSOCKET /ws → encaminha para o BFF
+        #  ESSENCIAL PARA STOMP
+        # ---------------------------------------------------------
+
+        # Libera /ws/info usado pelo SockJS
+        - id: websocket_info_route
+          uri: lb://microservico-radares-bff
+          predicates:
+            - Path=/ws/info/**
+          filters:
             - PreserveHostHeader
 
         # Rota WebSocket (OBRIGATÓRIA)
