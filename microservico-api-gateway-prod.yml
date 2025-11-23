@@ -80,3 +80,14 @@ spring:
       org.springframework.security.web.server: TRACE
       org.springframework.security.oauth2: TRACE
       org.springframework.cloud.loadbalancer: TRACE
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+    endpoint:
+      health:
+        show-details: always
+    server:
+      port: 8080
