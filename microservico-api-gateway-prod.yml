@@ -27,7 +27,19 @@ spring:
 
       routes:
         # ---------------------------------------------------------
-        # ROTAS HTTP /api → encaminha para o BFF
+        # ROTA ESPECÍFICA PARA WEBSOCKET (Coloque ANTES da rota /api genérica)
+        # ---------------------------------------------------------
+        - id: bff_websocket
+          uri: lb:ws://microservico-radares-bff
+          predicates:
+            # Captura /api/ws e tudo que vier depois
+            - Path=/api/ws/**
+          filters:
+            - StripPrefix=1
+            # Remove cabeçalhos duplicados se o BFF mandar
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_FIRST
+        # ---------------------------------------------------------
+        # ROTA HTTP REST
         # ---------------------------------------------------------
         - id: bff_route_api
           uri: lb://microservico-radares-bff
@@ -36,7 +48,8 @@ spring:
           filters:
             - StripPrefix=1
             - PreserveHostHeader
-
+            # Remove cabeçalhos duplicados
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_FIRST
         # ---------------------------------------------------------
         #  ROTAS WEBSOCKET /ws → encaminha para o BFF
         #  ESSENCIAL PARA STOMP
@@ -62,8 +75,8 @@ spring:
         add-to-simple-url-handler-mapping: true
         cors-configurations:
           '[/**]':
-            allowedOrigins:
-              - "http://localhost:3009"
+            allowedOriginPatterns:
+              - "*" # Em produção, troque "*" pela URL exata do front: "http://localhost:3009"
             allowedMethods:
               - GET
               - POST
