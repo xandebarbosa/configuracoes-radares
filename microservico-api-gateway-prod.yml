@@ -2,81 +2,24 @@ server:
   port: 8080
 
 spring:
-  # --- [NOVO] CONFIGURAÇÃO DE SEGURANÇA OIDC (KEYCLOAK) ---
   security:
     oauth2:
       resourceserver:
         jwt:
-          # Ela diz ao Gateway qual "emissor" de token ele deve confiar.
           issuer-uri: http://192.168.0.6:8180/realms/radares-realm
           jwk-set-uri: http://192.168.0.6:8180/realms/radares-realm/protocol/openid-connect/certs
-          #issuer-uri: http://host.docker.internal:8180/realms/radares-realm
-          #issuer-uri: http://keycloak:8080/realms/radares-realm
-          #issuer-uri: http://localhost:8180/realms/radares-realm
-          # Aponta para o seu servidor Keycloak.
-          #jwk-set-uri: http://host.docker.internal:8180/realms/radares-realm/protocol/openid-connect/certs
-          #jwk-set-uri: http://keycloak:8080/realms/radares-realm/protocol/openid-connect/certs
-          #jwk-set-uri: http://localhost:8180/realms/radares-realm/protocol/openid-connect/certs
 
-  # --- CONFIGURAÇÃO DO GATEWAY ---
   cloud:
     gateway:
       discovery:
         locator:
           enabled: true
 
-      routes:
-        # ---------------------------------------------------------
-        # ROTA ESPECÍFICA PARA WEBSOCKET (Coloque ANTES da rota /api genérica)
-        # ---------------------------------------------------------
-        - id: bff_websocket
-          uri: lb:ws://microservico-radares-bff
-          predicates:
-            # Captura /api/ws e tudo que vier depois
-            - Path=/api/ws/**
-          filters:
-            - StripPrefix=1
-            # Remove cabeçalhos duplicados se o BFF mandar
-            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_FIRST
-        # ---------------------------------------------------------
-        # ROTA HTTP REST
-        # ---------------------------------------------------------
-        - id: bff_route_api
-          uri: lb://microservico-radares-bff
-          predicates:
-            - Path=/api/**
-          filters:
-            - StripPrefix=1
-            - PreserveHostHeader
-            # Remove cabeçalhos duplicados
-            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_FIRST
-        # ---------------------------------------------------------
-        #  ROTAS WEBSOCKET /ws → encaminha para o BFF
-        #  ESSENCIAL PARA STOMP
-        # ---------------------------------------------------------
-
-        # Libera /ws/info usado pelo SockJS
-        - id: websocket_info_route
-          uri: lb://microservico-radares-bff
-          predicates:
-            - Path=/ws/info/**
-          filters:
-            - PreserveHostHeader
-
-        # Rota WebSocket (OBRIGATÓRIA)
-        - id: websocket_route
-          uri: lb:ws://microservico-radares-bff
-          predicates:
-            - Path=/ws/**
-          filters:
-            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-      
+      # Configuração Global de CORS
       globalcors:
-        add-to-simple-url-handler-mapping: true
         cors-configurations:
           '[/**]':
-            allowedOriginPatterns:
-              - "*" # Em produção, troque "*" pela URL exata do front: "http://localhost:3009"
+            allowedOriginPatterns: "*" # Em prod, idealmente use a URL do front ex: "http://localhost:3009"
             allowedMethods:
               - GET
               - POST
@@ -85,11 +28,38 @@ spring:
               - OPTIONS
             allowedHeaders: "*"
             allowCredentials: true
-  # [NOVO] Adiciona logs de debug para roteamento e service discovery
+
+      routes:
+        # ---------------------------------------------------------
+        # ROTA UNIFICADA PARA WEBSOCKET (SockJS + STOMP)
+        # ---------------------------------------------------------
+        # Esta rota captura tanto o handshake HTTP (/info) quanto o upgrade WS
+        - id: bff_websocket
+          uri: lb:ws://microservico-radares-bff
+          predicates:
+            - Path=/api/ws/**
+          filters:
+            - StripPrefix=1
+            - PreserveHostHeader
+            # Remove duplicatas se o BFF também enviar CORS
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_FIRST
+
+        # ---------------------------------------------------------
+        # ROTA HTTP REST PADRÃO
+        # ---------------------------------------------------------
+        - id: bff_route_api
+          uri: lb://microservico-radares-bff
+          predicates:
+            - Path=/api/**
+          filters:
+            - StripPrefix=1
+            - PreserveHostHeader
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials RETAIN_FIRST
+
   logging:
     level:
       org.springframework.cloud.gateway: DEBUG
-      org.springframework.security: DEBUG
+      org.springframework.security: TRACE
       org.springframework.security.web.server: TRACE
       org.springframework.security.oauth2: TRACE
       org.springframework.cloud.loadbalancer: TRACE
