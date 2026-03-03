@@ -1,39 +1,46 @@
-server:
-  port: 8088
+quarkus:
+  http:
+    port: 8088
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  metrics:
-    tags:
-      application: microservice-radar-rondon
+  # Conexão com o MongoDB (Substitui o datasource do Postgres)
+  mongodb:
+    connection-string: ${MONGODB_URI:mongodb://192.168.0.155:27017/}
+    database: ${MONGODB_DATABASE:Veiculos}
 
-spring:
-  datasource:
-    url: jdbc:postgresql://postgres-db:5432/rondon_db
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    driverClassName: org.postgresql.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: validate
-  flyway:
-    enabled: true
-  rabbitmq:
-    host: rabbitmq
-    port: 5672
-    username: ${RABBITMQ_USER}
-    password: ${RABBITMQ_PASSWORD}
+  # Health Check e Métricas (Substitui o management.endpoints do Spring)
+  smallrye-health:
+    root-path: /actuator/health
+  micrometer:
+    export:
+      prometheus:
+        enabled: true
+        path: /actuator/prometheus
 
-rabbitmq:
-  exchange:
-    name: radares_exchange
-  routing:
-    key: radares.rondon
+# ═════════════════════════════════════════════════
+#  RABBITMQ (SmallRye Reactive Messaging)
+# ═════════════════════════════════════════════════
+# O Quarkus busca essas chaves na raiz do arquivo para a conexão base
+rabbitmq-host: ${RABBITMQ_HOST:rabbitmq}
+rabbitmq-port: ${RABBITMQ_PORT:5672}
+rabbitmq-username: ${RABBITMQ_USER:guest}
+rabbitmq-password: ${RABBITMQ_PASSWORD:guest}
 
+# Configuração específica do canal de saída (Publisher)
+mp:
+  messaging:
+    outgoing:
+      radares-out:
+        connector: smallrye-rabbitmq
+        exchange:
+          name: radares_exchange
+          type: direct
+          durable: true
+        routing-key: radares.rondon
+
+# ═════════════════════════════════════════════════
+#  CONFIGURAÇÕES DE NEGÓCIO
+# ═════════════════════════════════════════════════
+# Mantido conforme o original para compatibilidade de regras da aplicação
 radar:
   folder:
     path: D:\\Radares\\Viarondon
