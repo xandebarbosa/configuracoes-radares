@@ -1,0 +1,25 @@
+quarkus:
+  http:
+    port: 8090
+  application:
+    name: MICROSERVICO-ANALISE-INTELIGENTE
+
+# ═════════════════════════════════════════════════
+#  CONEXÃO COM O BFF
+# ═════════════════════════════════════════════════
+# O serviço de análise precisa saber onde está o BFF para buscar os dados brutos
+quarkus.rest-client.bff-api.url: http://microservico-radares-bff:8081
+
+# ═════════════════════════════════════════════════
+#  EUREKA
+# ═════════════════════════════════════════════════
+# Diz para a nossa classe customizada EurekaRegistrationService onde se registrar
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+
+# ═════════════════════════════════════════════════
+#  LOGS
+# ═════════════════════════════════════════════════
+quarkus.log.level: INFO
