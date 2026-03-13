@@ -1,0 +1,25 @@
+quarkus:
+  http:
+    port: 8091
+    host: 0.0.0.0
+  application:
+    name: MICROSERVICO-RADARES-MONITORSP
+
+  # Conexão com o MongoDB (Substitui o datasource do Postgres)
+  mongodb:
+    connection-string: ${MONGODB_URI:mongodb://192.168.0.155:27017/}
+    database: ${MONGODB_DATABASE:Veiculos}
+
+  # Health Check e Métricas (Substitui o management.endpoints do Spring)
+  smallrye-health:
+    root-path: /actuator/health
+  micrometer:
+    export:
+      prometheus:
+        enabled: true
+        path: /actuator/prometheus
+
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: http://eureka-server:8761/eureka/
