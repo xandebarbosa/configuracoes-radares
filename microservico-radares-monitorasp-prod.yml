@@ -3,7 +3,7 @@ quarkus:
     port: 8091
     host: 0.0.0.0
   application:
-    name: MICROSERVICO-RADARES-MONITORSP
+    name: MICROSERVICO-RADARES-MONITORASP
 
   # Conexão com o MongoDB (Substitui o datasource do Postgres)
   mongodb:
