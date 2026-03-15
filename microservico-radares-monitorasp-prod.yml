@@ -1,14 +1,9 @@
 quarkus:
-  rest-client:
-    eureka-api:
-      url: http://eureka-server:8761/eureka/
   http:
     port: 8091
   mongodb:
     connection-string: ${MONGODB_URI:mongodb://192.168.0.155:27017/}
     database: ${MONGODB_DATABASE:Veiculos}
-
-  # Health Check e Métricas (Substitui o management.endpoints do Spring)
   smallrye-health:
     root-path: /actuator/health
   micrometer:
@@ -16,3 +11,22 @@ quarkus:
       prometheus:
         enabled: true
         path: /actuator/prometheus
+  rest-client:
+    eureka-api:
+      url: http://eureka-server:8761/eureka/
+
+rabbitmq-host: ${RABBITMQ_HOST:rabbitmq}
+rabbitmq-port: ${RABBITMQ_PORT:5672}
+rabbitmq-username: ${RABBITMQ_USERNAME:guest}
+rabbitmq-password: ${RABBITMQ_PASSWORD:guest}
+
+mp:
+  messaging:
+    outgoing:
+      radares-out:
+        connector: smallrye-rabbitmq
+        exchange:
+          name: ${rabbitmq.exchange.name:radares_exchange}
+          type: direct
+          durable: true
+        routing-key: ${rabbitmq.routing.key:radares.monitorasp}
