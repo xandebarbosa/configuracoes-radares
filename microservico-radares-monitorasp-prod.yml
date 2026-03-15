@@ -1,8 +1,9 @@
 quarkus:
+  rest-client:
+    eureka-api:
+      url: http://eureka-server:8761/eureka/
   http:
     port: 8091
-
-  # Conexão com o MongoDB (Substitui o datasource do Postgres)
   mongodb:
     connection-string: ${MONGODB_URI:mongodb://192.168.0.155:27017/}
     database: ${MONGODB_DATABASE:Veiculos}
@@ -15,8 +16,3 @@ quarkus:
       prometheus:
         enabled: true
         path: /actuator/prometheus
-
-  eureka:
-    client:
-      serviceUrl:
-        defaultZone: http://eureka-server:8761/eureka/
