@@ -29,15 +29,19 @@ resilience4j:
         timeout-duration: 4s
     instances:
       listarKms: # ← instância específica para KMs
-        timeout-duration: 30s         # mais tempo pois a query é pesada
+        timeout-duration: 45s         # mais tempo pois a query é pesada
       listRodovias:
-        timeout-duration: 30s
+        timeout-duration: 45s
       buscaPlaca:
-        timeout-duration: 30s         # busca histórica pode ser lenta
+        timeout-duration: 60s         # busca histórica pode ser lenta
       radaresLocal:
-        timeout-duration: 30s
+        timeout-duration: 45s
       geoSearch:
-        timeout-duration: 30s
+        timeout-duration: 45s
+      genericList:
+        timeout-duration: 20s
+      locationsService:
+        timeout-duration: 10s
   circuitbreaker:
     configs:
       default:
