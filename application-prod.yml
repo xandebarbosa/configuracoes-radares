@@ -1,4 +1,12 @@
 eureka:
+  instance:
+    prefer-ip-address: true
+    # Isso ajuda o Eureka a identificar o container na rede Docker
+    instance-id: ${spring.application.name}:${random.value}
   client:
+    registerWithEureka: true
+    fetchRegistry: true
+    # Força a região local para parar de buscar "ConfigClusterResolver" da AWS
+    region: default
     serviceUrl:
       defaultZone: http://eureka-server:8761/eureka/
