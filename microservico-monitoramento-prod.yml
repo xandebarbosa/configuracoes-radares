@@ -15,8 +15,10 @@ spring:
     url: jdbc:postgresql://postgres-db:5432/monitoramento_db
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: validate
   flyway:
     enabled: true
